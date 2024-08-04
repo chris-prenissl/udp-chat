@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.christophprenissl.udpchat.data.repository.UdpChatRepository
 import com.christophprenissl.udpchat.presentation.chat.ChatScreen
 import com.christophprenissl.udpchat.presentation.chat.ChatViewModel
@@ -27,7 +28,8 @@ class MainActivity : ComponentActivity() {
                         throw IllegalArgumentException("Unknown ViewModel class")
                     }
                 } }
-                ChatScreen(viewModel::onEvent)
+                val state = viewModel.state.collectAsStateWithLifecycle()
+                ChatScreen(state = state.value, onEvent = viewModel::onEvent)
             }
         }
     }
