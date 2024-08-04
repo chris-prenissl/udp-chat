@@ -1,4 +1,4 @@
-package com.christophprenissl.udpchat.ui.theme
+package com.christophprenissl.udpchat.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
