@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,17 +25,20 @@ fun ChatScreen(
 ) {
     Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
         Column(
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(padding)
                 .fillMaxSize()
+                .padding(padding)
         ) {
-            Row {
+            LazyColumn {
+
+            }
+            Row(modifier = Modifier.padding(Sizes.STANDARD_PADDING.dp)) {
                 TextField(
                     value = state.input,
                     onValueChange = { onEvent(ChatEvent.InputChanged(it)) },
-                    modifier = Modifier.padding(horizontal = Sizes.STANDARD_PADDING.dp),
+                    modifier = Modifier.padding(end = Sizes.STANDARD_PADDING.dp),
                 )
                 Button(onClick = { onEvent(ChatEvent.SendMessage) }) {
                     Text(text = Strings.SEND_BUTTON_LABEL)
