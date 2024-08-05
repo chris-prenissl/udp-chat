@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -12,6 +14,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.christophprenissl.udpchat.presentation.util.Sizes
@@ -38,7 +41,10 @@ fun LoginScreen(
                         onEvent(LoginEvent.DestinationIpAddressInputChanged(it))
                     },
                     label = { Text(text = Strings.DESTINATION_IP_ADDRESS_LABEL) },
-                    modifier = Modifier.padding(Sizes.STANDARD_PADDING.dp)
+                    modifier = Modifier.padding(Sizes.STANDARD_PADDING.dp),
+                    isError = !state.isValidInput,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 TextField(
                     value = state.sendPortInput,
@@ -46,7 +52,10 @@ fun LoginScreen(
                         onEvent(LoginEvent.SendPortInputChanged(it))
                     },
                     label = { Text(text = Strings.SEND_PORT_LABEL) },
-                    modifier = Modifier.padding(Sizes.STANDARD_PADDING.dp)
+                    modifier = Modifier.padding(Sizes.STANDARD_PADDING.dp),
+                    isError = !state.isValidInput,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
                 TextField(
                     value = state.receivePortInput,
@@ -54,7 +63,13 @@ fun LoginScreen(
                         onEvent(LoginEvent.ReceivePortInputChanged(it))
                     },
                     label = { Text(text = Strings.RECEIVE_PORT_LABEL) },
-                    modifier = Modifier.padding(Sizes.STANDARD_PADDING.dp)
+                    modifier = Modifier.padding(Sizes.STANDARD_PADDING.dp),
+                    isError = !state.isValidInput,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardActions = KeyboardActions(
+                        onDone = { onEvent(LoginEvent.LoginPressed) }
+                    )
                 )
             }
             Button(onClick = { onEvent(LoginEvent.LoginPressed) }) {
