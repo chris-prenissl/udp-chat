@@ -5,25 +5,24 @@ import androidx.lifecycle.viewModelScope
 import com.christophprenissl.udpchat.data.model.toEntity
 import com.christophprenissl.udpchat.data.repository.UdpChatRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ChatViewModel(private val repository: UdpChatRepository) : ViewModel() {
-    private val _message = repository.message()
-        .map { it.toEntity() }
+    init {
+        viewModelScope.launch {
+            repository.message().collect { messageDto ->
+                val message = messageDto.toEntity()
+                _state.update { state ->
+                    state.copy(messages = state.messages + message)
+                }
+            }
+        }
+    }
 
     private val _state = MutableStateFlow(ChatState())
-    val state = combine(_state, _message) { state, message->
-        state.copy(messages = state.messages + message)
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        ChatState()
-    )
+    val state = _state.asStateFlow()
 
     fun onEvent(event: ChatEvent) {
         when (event) {
