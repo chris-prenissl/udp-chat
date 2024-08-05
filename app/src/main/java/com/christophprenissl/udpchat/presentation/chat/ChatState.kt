@@ -1,3 +1,5 @@
 package com.christophprenissl.udpchat.presentation.chat
 
-data class ChatState(val input: String = "")
+import com.christophprenissl.udpchat.domain.model.Message
+
+data class ChatState(val input: String = "", val messages: List<Message> = emptyList())

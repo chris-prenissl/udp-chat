@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -32,7 +34,12 @@ fun ChatScreen(
                 .padding(padding)
         ) {
             LazyColumn {
-
+                items(state.messages) {
+                    Row {
+                        Text(text = it.sender, style = MaterialTheme.typography.labelLarge)
+                        Text(text = it.message)
+                    }
+                }
             }
             Row(modifier = Modifier.padding(Sizes.STANDARD_PADDING.dp)) {
                 TextField(

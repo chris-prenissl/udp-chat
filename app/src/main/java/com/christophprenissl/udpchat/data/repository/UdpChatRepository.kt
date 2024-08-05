@@ -1,8 +1,11 @@
 package com.christophprenissl.udpchat.data.repository
 
+import com.christophprenissl.udpchat.data.model.MessageDto
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -13,20 +16,25 @@ class UdpChatRepository {
     private var sendPort: Int = 12345
     private var receivePort: Int = 54321
 
+
     fun setup(destinationIpAddress: String, sendPort: Int, receivePort: Int) {
         this.destinationIpAddress = destinationIpAddress
         this.sendPort = sendPort
         this.receivePort = receivePort
     }
 
-    fun receiveMessages() = flow {
+    fun message() = flow {
         val socket = DatagramSocket(receivePort)
-        val receiveData = ByteArray(1024)
-        val receivePacket = DatagramPacket(receiveData, receiveData.size)
-        while (true) {
-            socket.receive(receivePacket)
-            val message = String(receivePacket.data, 0, receivePacket.length)
-            emit(message)
+        val buffer = ByteArray(1024)
+        socket.use {
+            while (currentCoroutineContext().isActive) {
+                val packet = DatagramPacket(buffer, buffer.size)
+                it.receive(packet)
+                val messageText = String(packet.data, 0, packet.length)
+                val senderAddress = packet.address
+                val message = MessageDto(senderAddress.hostName, messageText)
+                emit(message)
+            }
         }
     }
         .flowOn(Dispatchers.IO)
