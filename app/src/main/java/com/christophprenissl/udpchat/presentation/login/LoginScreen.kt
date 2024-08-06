@@ -7,11 +7,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -25,6 +30,8 @@ fun LoginScreen(
     state: LoginState = LoginState(),
     onEvent: (LoginEvent) -> Unit = {},
 ) {
+    var dropDownExpanded by remember { mutableStateOf(false) }
+
     Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
         Column(
             verticalArrangement = Arrangement.SpaceEvenly,
@@ -71,6 +78,30 @@ fun LoginScreen(
                         onDone = { onEvent(LoginEvent.LoginPressed) }
                     )
                 )
+                Button(onClick = { dropDownExpanded = true }) {
+                    Text(text = Strings.CHOOSE_USER_LABEL)
+                }
+                DropdownMenu(
+                    expanded = dropDownExpanded,
+                    onDismissRequest = { dropDownExpanded = false }
+                ) {
+                    Button(
+                        onClick = {
+                            onEvent(LoginEvent.UserASelected)
+                            dropDownExpanded = false
+                        }
+                    ) {
+                        Text(text = Strings.USER_A_LABEL)
+                    }
+                    Button(
+                        onClick = {
+                            onEvent(LoginEvent.UserBSelected)
+                            dropDownExpanded = false
+                        }
+                    ) {
+                        Text(text = Strings.USER_B_LABEL)
+                    }
+                }
             }
             Button(onClick = { onEvent(LoginEvent.LoginPressed) }) {
                 Text(text = Strings.LOGIN_BUTTON_LABEL)

@@ -39,6 +39,13 @@ class LoginViewModel(private val udpChatRepository: UdpChatRepository) : ViewMod
                     }
                 }
             }
+
+            LoginEvent.UserASelected -> _state.update {
+                _state.value.copy(destinationIpAddressInput = "10.0.2.2", sendPortInput = "12345", receivePortInput = "54321")
+            }
+            LoginEvent.UserBSelected -> _state.update {
+                _state.value.copy(destinationIpAddressInput = "10.0.2.2", sendPortInput = "54321", receivePortInput = "12345")
+            }
         }
     }
 

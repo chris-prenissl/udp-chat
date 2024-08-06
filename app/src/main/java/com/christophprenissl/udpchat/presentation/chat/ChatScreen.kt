@@ -2,13 +2,13 @@ package com.christophprenissl.udpchat.presentation.chat
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.christophprenissl.udpchat.presentation.component.MessageCard
 import com.christophprenissl.udpchat.presentation.util.Sizes
 import com.christophprenissl.udpchat.presentation.util.Strings
 
@@ -33,12 +34,9 @@ fun ChatScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            LazyColumn {
-                items(state.messages) {
-                    Row {
-                        Text(text = it.sender, style = MaterialTheme.typography.labelLarge)
-                        Text(text = it.message)
-                    }
+            LazyColumn(contentPadding = PaddingValues(Sizes.STANDARD_PADDING.dp)) {
+                items(state.messages) { message ->
+                    MessageCard(message = message)
                 }
             }
             Row(modifier = Modifier.padding(Sizes.STANDARD_PADDING.dp)) {
